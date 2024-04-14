@@ -7,6 +7,7 @@ import os
 import platform
 import time
 import sys
+import subprocess
 
 # Console size (Curses)
 def _setConSize_curses(width,height):
@@ -65,26 +66,39 @@ def setConTitle(title):
     else:
         raise Exception(f"Error: Platform {platformv} not supported yet!")
 
+def callWithoutNl(inp=str):
+    sys.stdout.flush()  # Flush stdout to make sure any pending output is written
+    subprocess.call(inp, shell=True, stdout=subprocess.DEVNULL)
+
 # Clear the screen
-def clear():
+def clear(attemptNoNl=False,skipSetXY=False):
     '''Drawlib.conUtils: Attempts to clear the screen.
     ConUtils is dependent on platform commands so this might not work everywere :/'''
     # Get platform
     platformv = platform.system()
     # Linux using clear
     if platformv == "Linux":
-        os.system("clear")
+        if attemptNoNl == True:
+            callWithoutNl("clear")
+        else:
+            os.system("clear")
     # Mac using clear
     elif platformv == "Darwin":
-        os.system(f"clear")
+        if attemptNoNl == True:
+            callWithoutNl("clear")
+        else:
+            os.system(f"clear")
     # Windows using cls
     elif platformv == "Windows":
-        os.system("CLS")
+        if attemptNoNl == True:
+            callWithoutNl("CLS")
+        else:
+            os.system("CLS")
     # Error message if platform isn't supported
     else:
         raise Exception(f"Error: Platform {platformv} not supported yet!")
     # SET x,y
-    print("\033[0;0H")
+    if skipSetXY != True: print("\033[0;0H")
 
 # Pause
 def pause():

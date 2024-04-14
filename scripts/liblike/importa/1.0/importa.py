@@ -83,19 +83,23 @@ def autopipImport(moduleName=str,pipName=None,addPipArgsStr=None,cusPip=None,att
         return imported_module
 
 # Function to load a module from path
-def fromPath(path):
+def fromPath(path, globals_dict=None):
     '''CSlib: Import a module from a path. (Returns <module>)'''
     path = path.replace("/",os.sep).replace("\\",os.sep)
     spec = importlib.util.spec_from_file_location("module", path)
     module = importlib.util.module_from_spec(spec)
+    if globals_dict:
+        module.__dict__.update(globals_dict)
     spec.loader.exec_module(module)
     return module
 
-def fromPathAA(path):
+def fromPathAA(path, globals_dict=None):
     '''CSlib: Import a module from a path, to be used as: globals().update(fromPathAA(<path>)) (Returns <module>.__dict__)'''
     path = path.replace("/",os.sep).replace("\\",os.sep)
     spec = importlib.util.spec_from_file_location("module", path)
     module = importlib.util.module_from_spec(spec)
+    if globals_dict:
+        module.__dict__.update(globals_dict)
     spec.loader.exec_module(module)
     return module.__dict__
 
