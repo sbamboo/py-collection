@@ -98,7 +98,7 @@ def clear(attemptNoNl=False,skipSetXY=False):
     else:
         raise Exception(f"Error: Platform {platformv} not supported yet!")
     # SET x,y
-    if skipSetXY != True: print("\033[0;0H")
+    if skipSetXY != True: print("\033[0;0H",end="")
 
 # Pause
 def pause():
