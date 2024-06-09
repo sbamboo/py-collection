@@ -1,0 +1,36 @@
+Custom_Tags
+    {<tagName>} => .format(.value) => .value+ //for visualization, just handled first
+
+BuiltIn_Tags <- [ Formatters / PwshCompat / AnsiColorNames / Reset / BuiltInVars ]
+    {<tagName>} => const .value
+
+Placeholders <- [ {sym} / §sym§ ]
+    {esc} / §esc§ => "\033"
+    {\n}  / §nl§  => "\n"
+
+Unicode
+    {u.<unicode>} => "<unicodeChar>"
+
+Variable/Method
+    [mcclib.Networking.example] =>
+        if .callable
+            => mcclib.Networking.example()
+        else:
+            => mcclib.Networking.example
+
+PaletteKeys
+    {p:<key>} => ~palette?key~ => .value
+
+AnsiCode
+    {!<AnsiCode>} => "\033[<AnsiCode>"
+
+HexColor_Tags
+    {#<hex6d>} => ~f.RGB~ => "\033[38;2;<R>;<G>;<B>m"
+    {#!<hex6d>} => ~b.RGB~ => "\033[48;2;<R>;<G>;<B>m"
+
+RgbColor_Tags
+    {rgb.<R>;<G>;<B>} => "\033[38;2;<R>;<G>;<B>m"
+    {rgb!.<R>;<G>;<B>} => "\033[48;2;<R>;<G>;<B>m"
+
+Unformatted_Tags
+    {^<tagName>} => .value
