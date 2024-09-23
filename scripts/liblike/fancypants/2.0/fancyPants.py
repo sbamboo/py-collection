@@ -273,7 +273,7 @@ class ProgressTK(EventReciever):
         self.window.update()
 
 
-def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_class=Progress, block_size="auto", force_steps=None, before_text=None,after_text=None, raise_for_status=True,on_file_exist_error="raise", progress_class_args=[], progress_class_kwargs={}, requests_args=[], requests_kwargs={}, text_printer=print, handle_gdrive_vir_warn=False,gdrive_vir_warn_text="Found gdrive scan warning, attempting to extract link and download from there...",gdrive_vir_warn_assumed_bytes=384,gdrive_new_stream=None, forced_encoding=None, _ovvEventId=None):
+def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_class=Progress, headers=None, block_size="auto", force_steps=None, before_text=None,after_text=None, raise_for_status=True,on_file_exist_error="raise", progress_class_args=[], progress_class_kwargs={}, requests_args=[], requests_kwargs={}, text_printer=print, handle_gdrive_vir_warn=False,gdrive_vir_warn_text="Found gdrive scan warning, attempting to extract link and download from there...",gdrive_vir_warn_assumed_bytes=384,gdrive_new_stream=None, forced_encoding=None, _ovvEventId=None):
     """
     Function over requests.get that uses an EventHandler to allow for UI/TUI visual-progress of a file download.
     To just wrap requests.get and fetch content use `fetchUrl`.
@@ -362,6 +362,10 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
                     os.remove(output)
 
     # Create response object
+    o_requests_kwargs = requests_kwargs
+    if headers != None:
+        if len(headers) > 0:
+            requests_kwargs["headers"] = headers
     response = requests.get(url=url, stream=True, *requests_args, **requests_kwargs)
     if forced_encoding != None: response.encoding = forced_encoding
     total_size = int(response.headers.get('content-length', 0))
@@ -459,6 +463,7 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
                                             stream,
                                             event_handler,
                                             progress_class,
+                                            headers,
                                             o_block_size,
                                             force_steps,
                                             before_text,
@@ -468,7 +473,7 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
                                             progress_class_args,
                                             progress_class_kwargs,
                                             requests_args,
-                                            requests_kwargs,
+                                            o_requests_kwargs,
                                             text_printer,
                                             handle_gdrive_vir_warn,
                                             gdrive_vir_warn_text,
@@ -556,6 +561,7 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
                                                 stream,
                                                 event_handler,
                                                 progress_class,
+                                                headers,
                                                 o_block_size,
                                                 force_steps,
                                                 before_text,
@@ -565,7 +571,7 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
                                                 progress_class_args,
                                                 progress_class_kwargs,
                                                 requests_args,
-                                                requests_kwargs,
+                                                o_requests_kwargs,
                                                 text_printer,
                                                 handle_gdrive_vir_warn,
                                                 gdrive_vir_warn_text,
@@ -637,7 +643,7 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
         else:
             return response
 
-def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, block_size="auto", force_steps=None, yield_response=False, before_text=None,after_text=None, raise_for_status=True, progress_class_args=[], progress_class_kwargs={}, requests_args=[], requests_kwargs={}, text_printer=print, handle_gdrive_vir_warn=False,gdrive_vir_warn_text="Found gdrive scan warning, attempting to extract link and download from there...",gdrive_vir_warn_assumed_bytes=384, forced_encoding=None, _ovvEventId=None):
+def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, headers=None, block_size="auto", force_steps=None, yield_response=False, before_text=None,after_text=None, raise_for_status=True, progress_class_args=[], progress_class_kwargs={}, requests_args=[], requests_kwargs={}, text_printer=print, handle_gdrive_vir_warn=False,gdrive_vir_warn_text="Found gdrive scan warning, attempting to extract link and download from there...",gdrive_vir_warn_assumed_bytes=384, forced_encoding=None, _ovvEventId=None):
     """
     Function over requests.get that uses an EventHandler to allow for UI/TUI visual-progress of a url-fetch.
     To just wrap requests.get and download to a file use `downloadFile`.
@@ -696,6 +702,10 @@ def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, block_size
             event_handler = event_handler()
 
     # Create response object
+    o_requests_kwargs = requests_kwargs
+    if headers != None:
+        if len(headers) > 0:
+            requests_kwargs["headers"] = headers
     response = requests.get(url=url, stream=True, *requests_args, **requests_kwargs)
     if forced_encoding != None: response.encoding = forced_encoding
     total_size = int(response.headers.get('content-length', 0))
@@ -779,6 +789,7 @@ def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, block_size
                                         newurl,
                                         event_handler,
                                         progress_class,
+                                        headers,
                                         o_block_size,
                                         force_steps,
                                         yield_response,
@@ -788,7 +799,7 @@ def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, block_size
                                         progress_class_args,
                                         progress_class_kwargs,
                                         requests_args,
-                                        requests_kwargs,
+                                        o_requests_kwargs,
                                         text_printer,
                                         handle_gdrive_vir_warn,
                                         gdrive_vir_warn_text,
