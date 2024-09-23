@@ -287,6 +287,7 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
     stream         (bool)         : If true the output is assumed to be a stream, and `open(...)` won't be called on the output.
     event_handler  (EventHandler) : INSTANCE, The event-handler to use. (Defaulted to `EventHandler`)
     progress_class (Progress)     : NOT-INSTANCE, The progress-class to send updates to. (Defaulted to `Progress`)
+    headers        (dict)         : Headers to send to request apon making the request.
     block_size     (int,"auto")   : The block-size in bytes, or "auto" to determine based on total-file-size. (Defaulted to `"auto"`)
     force_steps    (int,None)     : Calculate and send events where progress is scaled into X amount of steps.
     before_text    (str,None)     : If not `None` will print this text to stdout before the download starts. (Calls the function defined in the ´text_printer´ param with only the text param, defaulted to `None`)
@@ -655,6 +656,7 @@ def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, headers=No
     url            (str)          : The URL to download from.
     event_handler  (EventHandler) : INSTANCE, The event-handler to use. (Defaulted to `EventHandler`)
     progress_class (Progress)     : NOT-INSTANCE, The progress-class to send updates to. (Defaulted to `Progress`)
+    headers        (dict)         : Headers to send to request apon making the request.
     block_size     (int,"auto")   : The block-size in bytes, or "auto" to determine based on total-file-size. (Defaulted to `"auto"`)
     force_steps    (int,None)     : Calculate and send events where progress is scaled into X amount of steps.
     yield_response (bool)         : If `True` will return the response-object instead of `response.content`.
