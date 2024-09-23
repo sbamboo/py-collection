@@ -25,7 +25,6 @@ def convert_bytes(bytes_size, binary_units=False):
 
     return f"{size:.2f} {prefixes[index]}"
 
-
 def get_optimal_block_size(file_size):
     """Determines an optimal block size based on file size."""
     if file_size < 1 * 1024 * 1024:  # < 1 MB
@@ -66,6 +65,13 @@ def gdrive_vir_warn_url_extractor(HTMLsource):
                 pref = "&"
             linkBuild += f"{pref}{name}={value}"
     return linkBuild
+
+def icoi(var):
+    if isinstance(var,type):
+        return 'class'
+    elif isinstance(var,object):
+        return 'instance'
+    return 'unknown'
 
 class EventCancelSenser(Exception):
     def __init__(self, message):
@@ -327,6 +333,8 @@ def downloadFile(url,output,stream=False, event_handler=EventHandler,progress_cl
         no_events = True
     else:
         no_events = False
+        if icoi(event_handler) == "class":
+            event_handler = event_handler()
 
     # Validate output
     if stream != True:
@@ -684,6 +692,8 @@ def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, block_size
         no_events = True
     else:
         no_events = False
+        if icoi(event_handler) == "class":
+            event_handler = event_handler()
 
     # Create response object
     response = requests.get(url=url, stream=True, *requests_args, **requests_kwargs)
@@ -801,10 +811,10 @@ def fetchUrl(url, event_handler=EventHandler,progress_class=Progress, block_size
                 if force_steps == None:
                     current_steps = int(round( (len(content_buffer)/total_size) *total_steps ))
                     if no_events == False:
-                        handler.update_progress(event_id, current_steps)
+                        event_handler.update_progress(event_id, current_steps)
                 else:
                     if no_events == False:
-                        handler.update_progress(event_id, len(content_buffer))
+                        event_handler.update_progress(event_id, len(content_buffer))
             
             # After Text
             if after_text not in ["",None]: text_printer(after_text)
