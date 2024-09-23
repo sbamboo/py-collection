@@ -1,4 +1,4 @@
-from fancyPants import downloadFile, fetchUrl, EventHandler, Progress, ProgressRich, ProgressTK
+from fancyPants import downloadFile, fetchUrl, EventHandler, Progress, ProgressRich
 
 # Setup
 handler = EventHandler()
